@@ -50,7 +50,7 @@ First of all, you must know which data you need/want to manage. It depends on wh
 
 ### Film Database
 
-Duplicates are forbidden in relafonal tables.
+Duplicates are forbidden in relational tables.
 
 #### Key
 
@@ -58,7 +58,7 @@ What differentiates one row from another.
 
 Key cannot be changed.
 
-> For purely commercial reasons, though, it may be assumed that the combinafon ftle/country/year will be unique.
+> For purely commercial reasons, though, it may be assumed that the combinafon title/country/year of films will be unique.
 
 #### Primary Key
 
@@ -74,13 +74,13 @@ Most choice revolves along assessing whether an attribute is or can be considere
 
 ### Entity
 
-In a database model, you call "enfty" something that has a life ot its own. eg. people, films, countries.
+In a database model, you call "entity" something that has a life ot its own. eg. people, films, countries.
 
-Relafonships connect entities. They have no life of their own.
+Relationships connect entities. They have no life of their own.
 
 > If a film project is abandoned, there will be no rows for this film in CREDITS.
 
-An "Enfty Relafonship Diagram" (E/R Diagram) is a way to represent tables in a database (you onen have hundreds of tables in a diagram). Crow feet indicate **"cardinality"**.
+An "Enfty Relafonship Diagram" (E/R Diagram) is a way to represent tables in a database (you even have hundreds of tables in a diagram). Crow feet indicate **"cardinality"**.
 
 # Lecture 2
 
@@ -145,7 +145,7 @@ DELETE
 SELECT
 ```
 
-> There is an official SQL standard that no product fully implements, and many subtly and someUmes irritatingly different dialects. We'll see the main variants of SQL.
+> There is an official SQL standard that no product fully implements, and many subtly and sometimes irritatingly different dialects. We'll see the main variants of SQL.
 
 - PostgreSQL
 - ORACLE
@@ -177,7 +177,7 @@ Table (and column) names must start with a leder (PostgreSQL tolerates an unders
 
 > The $ sign is also accepted, and some products allow #.
 
-> Note that names can sometimes be quoted between double quotes or square brackets, in which case spaces are allowed AND names become case-sensitive. Beder to avoid it.
+> Note that names can sometimes be quoted between double quotes or square brackets, in which case spaces are allowed AND names become case-sensitive. Better to avoid it.
 
 ```sql
 create table table_name
@@ -244,12 +244,12 @@ RAW in Oracle, and VARBINARY (SQL Server) are the binary equivalent of VARCHAR.
 
 BLOB is the binary equivalent of CLOB (BLOB means Binary Large Object).
 
-PostgreSQL calls the binary datatype BYTEA, don't ask me why.
+PostgreSQL calls the binary datatype `BYTEA`, don't ask me why.
 
 ## `NULL`
 
 It indicates the absence of a value, because we don't yet
-know it, or because in that case the adribute is irrelevant, or because we haven't the slightest idea about what this should be.
+know it, or because in that case the attribute is irrelevant, or because we haven't the slightest idea about what this should be.
 
 **For more on `NULL`, see Lecture 3.**
 
@@ -264,7 +264,9 @@ create table people ( peopleid int not null,
 ## Comments
 ```sql
 comment on column people.surname is 'Surname or stage name';
+-- Stored in the database
 -- comments in an SQL statement start with a double dash
+-- Not usually stored in the database
 ```
 
 ## Constraints
@@ -285,13 +287,13 @@ create table people ( peopleid int not null
 ### `PRIMARY KEY`
 `PRIMARY KEY` indicates two things:
 
-1. The value is mandatory (the additional NOT NULL doesn't hurt but is redundant).
+1. The value is mandatory (the additional `NOT NULL` doesn't hurt but is redundant).
 2. The values are unique (no duplicates allowed in the column).
 
 ### `UNIQUE`
 
 With many products data **is** case sensitive and different
-capitalizaUon means different values that wouldn't violate a
+capitalization means different values that wouldn't violate a
 uniqueness constraint. You **must** standardize case. eg. Oracle, PostgreSQL and DB2.
 
 ### Referential Integrity
@@ -307,7 +309,7 @@ create table movies (movieid    int not null primary key,
                               references countryies(country_code))
 ```
 
-A foreign key can be composed of a combinaUon of columns (rare).
+A foreign key can be composed of a combination of columns (rare).
 
 Note that **the constraint works both ways**.
 
@@ -422,7 +424,7 @@ select * from movies
   where upper(title) not like '%A%'
 ```
 
-> Not good to apply a function to a searched column.
+**Not good to apply a function to a searched column.**
 
 ### `NULL`
 The only way to test `NULL`.
@@ -450,7 +452,7 @@ case upper(color)
 end as color,
 ```
 
-NULL cannot be tested in a WHEN branch.
+`NULL` cannot be tested in a `WHEN` branch.
 
 ## Useful Functions
 
@@ -510,7 +512,7 @@ You can also group on several columns. Every column that isn't an aggregate func
 - `sum(col)`
 - `stddev()`
 
-> SQLite hasn't `stddev()`, which computes the standard deviaTon
+> SQLite hasn't `stddev()`, which computes the standard deviation
 
 ```sql
 select * from (
@@ -524,6 +526,10 @@ where oldest_movie < 1940
 
 ### `HAVING`
 
+The HAVING clause was added to SQL because the WHERE keyword could not be used with aggregate functions.
+
+--- [W3Schools](https://www.w3schools.com/sql/sql_having.asp)
+
 ```sql
 select country,
         min(year_released) oldest_movie
@@ -536,7 +542,7 @@ having min(year_released) < 1940
 
 `where country = 'us'` is way more efficient.
 
-> When you apply a funcTon or operators to a null, with very few exceptions the result is null because the result of a transformation applied to something unknown is an unknown quantity.
+When you apply a function or operators to a null, with very few exceptions the result is null because the result of a transformation applied to something unknown is an unknown quantity.
 
 **Aggregate functions ignore `NULL`s.**
 
@@ -638,7 +644,7 @@ on p.peopleid = c.peopleid
 
 ## Filtering and Qualifying
 
-An outer join is always a qualifying join, unless it is associated with an IS `NULL` condiIon, meaning that not finding a match is significant.
+An outer join is always a qualifying join, unless it is associated with an `IS NULL` condiIon, meaning that not finding a match is significant.
 
 If a join is removed, MORE rows?
 
@@ -753,7 +759,7 @@ Some products (Oracle, DB2, PostgreSQL with some twisting) even allow comparing 
            where ...)
 ```
 
-`IN()` means an implicit DISTINCT in the subquery.
+**`IN()` means an implicit DISTINCT in the subquery.**
 
 If **demonstrably unique**, no `distinct` wtih a `JOIN` (no need with a `IN()`).
 
@@ -764,7 +770,27 @@ If **demonstrably unique**, no `distinct` wtih a `JOIN` (no need with a `IN()`).
 ### `NULL`s
 
 ```sql
-select * from people where born >= 1970
+select * from people
+where born >= 1970
+  and first_name not in
+  (select first_name
+  from people
+  where born < 1970)
+```
+
+#### No data found!!! Why?
+
+`col in ('a', 'b', 'c') = (col = 'a' or col = 'b' or col = 'c')`
+
+Throw a `NULL` in, we have a condition that is never true but because of `OR` it can just be ignored.
+
+`col = NULL` never true.
+
+A subquery that returns a `NULL `in a `NOT IN ()` will always give a false condition, and the result will vanish. If you want to be safe, you should add a condition saying that you DON'T WANT `NULL` values if they are possible.
+
+```sql
+select * from people
+where born >= 1970
   and first_name not in
   (select first_name
   from people
@@ -773,7 +799,7 @@ select * from people where born >= 1970
 ```
 
 ### `WHERE` Correlated Query
-Correlated queries in the WHERE clause are used with the `(NOT) EXISTS` construct.
+Correlated queries in the `WHERE` clause are used with the `(NOT) EXISTS` construct.
 
 **NEVER try to correlate an `IN()`!**
 
@@ -850,7 +876,8 @@ Oracle
 select *
 from (select title, country, year_released
       from movies
-order by title) m where rownum <= 10
+      order by title) m
+where rownum <= 10
 ```
 
 #### Third Page
@@ -923,7 +950,7 @@ With DBMS products that support window funcIons, every aggregate function can be
 
 Window functions always operate againts rows that belong to a result set.
 
-> One related characteristics is that they can only appear aler the SELECT, not in the WHERE clause, and there is nothing with them similar to HAVING with aggregate functions.
+> One related characteristics is that they can only appear after the `SELECT`, not in the `WHERE` clause, and there is nothing with them similar to `HAVING` with aggregate functions.
 
 ### `OVER()`
 
@@ -935,6 +962,7 @@ You can have an empty `OVER` clause to indicate that you want the result compute
 
 ### Ranking Reporting Function
 
+With a ranking window function you MUST have an `ORDER BY` clause in the `OVER()` (you cannot have an empty `OVER()` clause). You can combine it with a `PARTITION BY` to order with groups.
 
 ```sql
 over (order by ...)
@@ -993,7 +1021,7 @@ select * from (
   order by born
 )
 where rownum <= 3
--- Relational again.  
+-- Relational again.
 -- Just the fact that you have three of the oldest people born in 1970 or later.
 ```
 
@@ -1042,9 +1070,9 @@ If you only want to check whether the result of the count is zero or not, use `e
 
 Reason: If you use `exists` and if the third row you inspect verifies the condition, you can stop here. If you use `count`, you must check all rows to find how many other rows also verify the condition.
 
-### GROUP BY: Multiple joins with the same table
+### `GROUP BY`: Multiple joins with the same table
 
-GROUP BY can sometimes replace self-joins, especially when a
+`GROUP BY` can sometimes replace self-joins, especially when a
 table appears many, many times.
 
 Aim: Display the names of cities between which you have flights with this (legitimate) query.
@@ -1132,7 +1160,7 @@ If we more than what we want, the ordered set may be wrong, but we won't display
 
 ### `soundex()`
 
-Basically you retain the first lemer, drop vowels, lemers that sound like vowels (w = oo), h (ofen silent), then replace similarly sounding consonents by the same digit, before eliminating one of two successive idenAcal digits.
+Basically you retain the first lemer, drop vowels, lemers that sound like vowels (w = oo), h (ofen silent), then replace similarly sounding consonents by the same digit, before eliminating one of two successive identical digits.
 
 ![](midterm/soundex.png)
 
@@ -1224,9 +1252,9 @@ values  (value1, value2, ..., valuen),
         (valuep, valueq, ..., valuez)
 ```
 
-> If you don't specify the columns, it's understood as "all the columns, in the same order as they are displayed when running select * ".
+If you don't specify the columns, it's understood as "all the columns, in the same order as they are displayed when running `select *` ".
 
-> If you omit a column in `insert`, the value inserted is the default one if defined, otherwise it will be `NULL`.
+If you omit a column in `insert`, the value inserted is the default one if defined, otherwise it will be `NULL`.
 
 ```sql
 create table <table_name> (...
@@ -1234,9 +1262,9 @@ create table <table_name> (...
 default <default_value> not null, ...)
 ```
 
-> If I have a default value for a mandatory column, it will be OK to omit it in an insert statement.
+If I have a default value for a mandatory column, it will be OK to omit it in an insert statement.
 
-> If the column is nullable, nothing prevents you from explicitly inserting `NULL`, and the default value won't be used.
+If the column is nullable, nothing prevents you from explicitly inserting `NULL`, and the default value won't be used.
 
 ## How to populate numerical identifiers
 
@@ -1315,7 +1343,7 @@ Like a join in a select, same issues with nulls and duplicates!
 
 > Oracle and DB2 both support subqueries returning several columns (SQLite also now).
 
-> SQL Server and PostgreSQL both support the same older-join type of syntax allowing to join the updated table to the one from which we are gerng data.
+> SQL Server and PostgreSQL both support the same older-join type of syntax allowing to join the updated table to the one from which we are getting data.
 
 > MySQL allows a join with the newer syntax.
 
@@ -1350,7 +1378,7 @@ delete from table_name
 where ...
 ```
 
-If you omit the WHERE clause, then (as with `UPDATE`) the statement affects all rows and you **EMPTY** table_name!
+If you omit the `WHERE` clause, then (as with `UPDATE`) the statement affects all rows and you **EMPTY** table_name!
 
 ### `TRUNCATE`
 
