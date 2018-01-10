@@ -2,6 +2,8 @@
 
 ## Procedures
 
+Procedures should be packed as efficient statements together, not degenerate into complicated logic.
+
 - Business processes
 - Avoid cursors
 - Use `insert` ... `select` and complex `update`s
@@ -18,10 +20,12 @@
 
 May spent a lot of time in the network if running a business procedure in a remote server.
 
-Advantages
+So we should store the procedure directly on the server. All we need is just one call.
+
+Advantages:
 
 - A single version to maintain
-- Excute directly on the DBMS server
+- Execute directly on the DBMS server
 - Security, all changes follow the rules
 
 `create procedure myproc`
@@ -204,20 +208,28 @@ $$ language plpgsql;
 
 ## Triggers
 
-For excuting stored procedures automatically.
+For executing stored procedures automatically.
 
 **Fired by data changes** (never by a `SELECT`). [See below]
 
 - Modify input on the fly
+
+  Example: Force input in lowercase.
+
 - Check complex rules
+
+  Example: Complex business rules cannot be checked through declarative constraints. You can abort a transaction in a trigger, and return an error.
+
 - Manage data redundancy
+
+  Example: Split a newly inserted movie title into words.
 
 ### Trigger Activation
 
 Depending on what the trigger is designed to achieve, it may be fired by various events and at various possible precise moments.
 
-  - before/after `insert` trigger
-  - before/after `insert` for each row trigger
+  - Activate the trigger before/after `insert` for the who procedure
+  - Activate the trigger before/after `insert` for each row
 
 #### Time
 ![](lecture8/time.png)
